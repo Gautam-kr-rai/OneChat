@@ -3,7 +3,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import AdminDashboard from "./pages/AdminDashboard";
-import useThemeStore from "./store/theamStore"; // Theme store
+import useThemeStore from "./store/theamStore"; 
 import useAuthStore from "./store/authStore";
 import { useEffect } from "react";
 import { Sun, Moon } from "lucide-react";
@@ -32,7 +32,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login/>} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>

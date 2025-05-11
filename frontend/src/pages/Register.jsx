@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 export default function Register() {
@@ -84,14 +84,14 @@ export default function Register() {
 
       {/* Note with login link */}
       <p className="text-sm text-center text-gray-600 dark:text-gray-300">
-        Already have an account?{" "}
-        <a
-          href="/login"
-          className="text-blue-600 hover:underline dark:text-blue-400"
-        >
-          Login here
-        </a>
-      </p>
+  Already have an account?{" "}
+  <Link
+    to="/login"
+    className="text-blue-600 hover:underline dark:text-blue-400"
+  >
+    Login here
+  </Link>
+</p>
     </form>
   </div>
 );
