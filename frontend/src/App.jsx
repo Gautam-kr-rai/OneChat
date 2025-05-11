@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
-import Login from "./pages/login";
-import Chat from "./pages/chat";
-import AdminDashboard from "./pages/adminDashboard";
+import Login from "./pages/Login";
+import Chat from "./pages/Chat";
+import AdminDashboard from "./pages/AdminDashboard";
 import useThemeStore from "./store/theamStore"; // Theme store
 import useAuthStore from "./store/authStore";
 import { useEffect } from "react";
