@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react"; 
+import { Eye, EyeOff } from "lucide-react";
 import axios from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore.js";
@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // <-- loading state
   const navigate = useNavigate();
   const setUser = useAuthStore((s) => s.setUser);
 
@@ -16,20 +17,24 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!form.email || !form.password) {
       toast.error("Please fill in all fields");
       return;
     }
 
+    setLoading(true); // start loading
+
     try {
       const res = await axios.post("/api/auth/login", form);
       setUser(res.data);
-
       toast.success("You're in! Feel free to start the conversation.");
       navigate(res.data.role === "admin" ? "/admin" : "/chat");
     } catch (err) {
       console.error("Login Failed:", err.response?.data?.message || err.message);
       toast.error(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false); // stop loading
     }
   };
 
@@ -79,9 +84,21 @@ export default function Login() {
 
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-200"
+          disabled={loading}
+          className={`w-full py-2 px-4 text-white font-semibold rounded-lg shadow-md transition duration-200 
+            ${loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
         >
-          Login
+          {loading ? (
+            <div className="flex justify-center items-center gap-2">
+              <svg className="w-5 h-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+              </svg>
+              Logging in...
+            </div>
+          ) : (
+            "Login"
+          )}
         </button>
       </form>
     </div>
