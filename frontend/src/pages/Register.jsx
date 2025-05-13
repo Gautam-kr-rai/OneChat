@@ -26,12 +26,14 @@ export default function Register() {
   };
 
  return (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+  <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">\	
+  
     <form
       onSubmit={handleSubmit}
       className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md w-full max-w-md space-y-6"
     >
-      <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">Register</h2>
+      <img className='mx-auto h-36 w-auto' src='/small-logo.png' alt='LinkedIn' />
+      <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">Create your Space</h2>
 
       <div>
         <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
