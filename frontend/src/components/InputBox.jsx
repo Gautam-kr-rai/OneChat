@@ -100,52 +100,58 @@ export default function InputBox({ roomId, setMessages }) {
   }, []);
 
   return (
-    <div className="sticky bottom-0 bg-white dark:bg-gray-900 px-3 py-2 sm:px-4 sm:py-3 flex items-center gap-2 border-t">
-      {/* Emoji Picker Toggle */}
-      <button
-        type="button"
-        onClick={() => {
-          setShowPicker((prev) => !prev);
-          inputRef.current?.focus();
-        }}
-        className="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white"
-      >
-        <Smile className="w-6 h-6" />
-      </button>
+   <div className="relative">
+  <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 px-3 py-2 sm:px-4 sm:py-3 flex items-center gap-2 border-t">
+    {/* Emoji Picker Toggle */}
+    <button
+      type="button"
+      onClick={() => {
+        setShowPicker((prev) => !prev);
+        inputRef.current?.focus();
+      }}
+      className="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white"
+    >
+      <Smile className="w-6 h-6" />
+    </button>
 
-      {/* Input */}
-      <input
-        ref={inputRef}
-        value={text}
-        onChange={handleChange}
-        onKeyDown={(e) => e.key === "Enter" && send()}
-        className="flex-1 px-4 py-2 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring focus:border-blue-400"
-        placeholder="Type a message..."
-      />
+    {/* Input */}
+    <input
+      ref={inputRef}
+      value={text}
+      onChange={handleChange}
+      onKeyDown={(e) => e.key === "Enter" && send()}
+      className="flex-1 min-w-0 px-4 py-2 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring focus:border-blue-400"
+      placeholder="Type a message..."
+    />
 
-      {/* Send Button */}
-      <button
-  type="button"
-  tabIndex={-1}
-  onClick={send}
-  disabled={isSending}
-  className={`w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-300 ${
-    sendSuccess
-      ? "bg-green-500 text-white"
-      : isSending
-      ? "bg-blue-600 text-white"
-      : "bg-blue-500 hover:bg-blue-600 text-white"
-  }`}
->
-  <Send className="w-6 h-6" />
-</button>
+    {/* Send Button */}
+    <button
+      type="button"
+      tabIndex={-1}
+      onClick={send}
+      disabled={isSending}
+      className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-colors duration-300 ${
+        sendSuccess
+          ? "bg-green-500 text-white"
+          : isSending
+          ? "bg-blue-600 text-white"
+          : "bg-blue-500 hover:bg-blue-600 text-white"
+      }`}
+    >
+      <Send className="w-5 h-5 sm:w-6 sm:h-6" />
+    </button>
+  </div>
 
-      {/* Emoji Picker */}
-      {showPicker && (
-        <div ref={pickerRef} className="absolute bottom-full left-2 mb-2 z-50">
-          <EmojiPicker onEmojiClick={handleEmojiClick} theme="auto" />
-        </div>
-      )}
+  {/* Emoji Picker */}
+  {showPicker && (
+    <div
+      ref={pickerRef}
+      className="absolute bottom-16 left-3 z-50"
+    >
+      <EmojiPicker onEmojiClick={handleEmojiClick} theme="auto" />
     </div>
+  )}
+</div>
+
   );
 }

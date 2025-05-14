@@ -44,10 +44,10 @@ export default function ChatRoom({ roomId }) {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
+    <div className="flex flex-col h-[100dvh] bg-gradient-to-br from-slate-900 via-slate-500 to-slate-900 dark:bg-gray-900 transition-colors duration-200">
       {/* Chat Header */}
-      <div className="bg-white dark:bg-gray-800 p-4 shadow-md sticky top-0 z-10">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
+      <div className="bg-gradient-to-br from-blue-900 via-slate-400 to-slate-900 dark:bg-gray-800 p-4 shadow-md sticky top-0 z-10">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-dark-blue-900">
           🎶 Chat Room
         </h2>
       </div>

@@ -26,11 +26,11 @@ export default function Register() {
   };
 
  return (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">\	
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-400 to-slate-900 dark:bg-gray-900">\	
   
     <form
       onSubmit={handleSubmit}
-      className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md w-full max-w-md space-y-6"
+      className="bg-gradient-to-br from-slate-900 via-slate-400 to-slate-900  dark:bg-gray-800 p-8 rounded-2xl shadow-md w-full max-w-md space-y-6"
     >
       <img className='mx-auto h-36 w-auto' src='/small-logo.png' alt='LinkedIn' />
       <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">Create your Space</h2>
@@ -85,7 +85,7 @@ export default function Register() {
       </button>
 
       {/* Note with login link */}
-      <p className="text-sm text-center text-gray-600 dark:text-gray-300">
+      <p className="text-sm text-center text-dark-blue-900 dark:text-gray-300">
   Already have an account?{" "}
   <Link
     to="/login"

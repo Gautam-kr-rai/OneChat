@@ -13,7 +13,7 @@ export default function MessageBubble({ msg, self }) {
       )} */}
       <div className="max-w-md">
         <div
-          className={`text-xs text-gray-500 mb-1 ${
+          className={`text-xs text-dark-blue-900 mb-1 ${
             self ? "text-right" : ""
           }`}
         >

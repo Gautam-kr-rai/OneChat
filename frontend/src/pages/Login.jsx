@@ -39,15 +39,15 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-400 to-slate-900 text-black  dark:bg-gray-900">
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md w-full max-w-md space-y-6"
+        className="bg-gradient-to-br from-slate-800 via-slate-400 to-slate-900  dark:bg-gray-800 p-8 rounded-2xl shadow-md w-full max-w-md space-y-6"
       >
         <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">Login</h2>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-blue-400 dark:text-gray-300 mb-1">
             Email
           </label>
           <input
@@ -61,7 +61,7 @@ export default function Login() {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="password" className="block text-sm font-medium text-blue-400 dark:text-gray-300 mb-1">
             Password
           </label>
           <div className="relative">

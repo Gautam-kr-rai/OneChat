@@ -48,7 +48,7 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen ">
       <button
         className="absolute top-4 left-4 z-20 p-2 bg-white dark:bg-gray-800 border rounded-md md:hidden"
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -58,7 +58,7 @@ export default function AdminDashboard() {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 z-10 w-64 p-4 space-y-2 transform ${
+        className={`fixed inset-y-0 left-0 bg-gradient-to-br from-gray-200 via-slate-400 to-slate-900 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 z-10 w-64 p-4 space-y-2 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 md:relative md:translate-x-0 md:flex md:flex-col md:w-1/3`}
       >
@@ -87,7 +87,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 bg-gray-100 dark:bg-gray-950">
+      <div className="flex-1 bg-gradient-to-br from-slate-900 via-slate-400 to-slate-900  dark:bg-gray-950">
         {currentRoom ? (
           <ChatRoom roomId={currentRoom} />
         ) : (
