@@ -44,7 +44,7 @@ export default function ChatRoom({ roomId }) {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+    <div className="flex flex-col h-[95dvh] bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
       {/* Chat Header */}
       <div className="bg-white dark:bg-gray-800 p-4 shadow-md sticky top-0 z-10">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
