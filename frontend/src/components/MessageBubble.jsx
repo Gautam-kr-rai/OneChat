@@ -21,12 +21,14 @@ export default function MessageBubble({ msg, self }) {
           {format(new Date(msg.createdAt), "hh:mm a")}
         </div>
         <div
-          className={`rounded-lg px-3 py-2 ${
-            self ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-900"
-          }`}
-        >
-          {msg.content}
-        </div>
+  className={`px-4 py-2 rounded-2xl text-sm break-words shadow-md backdrop-blur-md ${
+    self
+      ? "bg-blue-500/80 text-white rounded-br-none"
+      : "bg-white/70 text-gray-900 border border-gray-200 rounded-bl-none"
+  }`}
+>
+  {msg.content}
+</div>
       </div>
     </div>
   );
