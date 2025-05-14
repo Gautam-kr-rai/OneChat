@@ -125,39 +125,20 @@ export default function InputBox({ roomId, setMessages }) {
 
       {/* Send Button */}
       <button
-        type="button"
-        tabIndex={-1}
-        onClick={send}
-        disabled={isSending}
-        className={`relative overflow-hidden w-12 h-12 flex items-center justify-center rounded-full transition-all ${
-          sendSuccess
-            ? "bg-green-500"
-            : isSending
-            ? "bg-blue-600"
-            : "bg-blue-500 hover:bg-blue-600"
-        }`}
-      >
-        {sendSuccess ? (
-          <Check className="w-6 h-6 text-white animate-bounce" />
-        ) : isSending ? (
-          <div className="flex space-x-1">
-            <div
-              className="w-2 h-2 bg-white rounded-full animate-bounce"
-              style={{ animationDelay: "0.1s" }}
-            ></div>
-            <div
-              className="w-2 h-2 bg-white rounded-full animate-bounce"
-              style={{ animationDelay: "0.2s" }}
-            ></div>
-            <div
-              className="w-2 h-2 bg-white rounded-full animate-bounce"
-              style={{ animationDelay: "0.3s" }}
-            ></div>
-          </div>
-        ) : (
-          <Send className="w-6 h-6 text-white" />
-        )}
-      </button>
+  type="button"
+  tabIndex={-1}
+  onClick={send}
+  disabled={isSending}
+  className={`w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-300 ${
+    sendSuccess
+      ? "bg-green-500 text-white"
+      : isSending
+      ? "bg-blue-600 text-white"
+      : "bg-blue-500 hover:bg-blue-600 text-white"
+  }`}
+>
+  <Send className="w-6 h-6" />
+</button>
 
       {/* Emoji Picker */}
       {showPicker && (
