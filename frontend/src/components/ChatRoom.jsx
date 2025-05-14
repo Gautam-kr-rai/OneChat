@@ -69,7 +69,7 @@ export default function ChatRoom({ roomId }) {
       )}
 
       {/* Input Box */}
-      <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-2 sm:p-3 pb-[env(safe-area-inset-bottom)]">
+      <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800   pb-[env(safe-area-inset-bottom)]">
         <InputBox roomId={roomId} setMessages={setMessages} />
       </div>
     </div>

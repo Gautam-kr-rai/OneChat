@@ -101,7 +101,7 @@ export default function InputBox({ roomId, setMessages }) {
 
   return (
    <div className="relative">
-  <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 px-3 py-2 sm:px-4 sm:py-3 flex items-center gap-2 border-t">
+  <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 px-3 py-2  sm:py-3 flex items-center gap-2 border-t">
     {/* Emoji Picker Toggle */}
     <button
       type="button"
