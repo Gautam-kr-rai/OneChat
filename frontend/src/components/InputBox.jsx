@@ -11,8 +11,32 @@ export default function InputBox({ roomId, setMessages }) {
   const [isSending, setIsSending] = useState(false);
   const [sendSuccess, setSendSuccess] = useState(false);
   const pickerRef = useRef(null);
-  const inputRef = useRef(null); // Add a ref for the input field
+  const inputRef = useRef(null);
   const user = useAuthStore((s) => s.user);
+
+  // Handle keyboard appearance on mobile
+  useEffect(() => {
+    const handleFocus = () => {
+      // Scroll to bottom when input is focused
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+      }, 100);
+    };
+
+    const input = inputRef.current;
+    if (input) {
+      input.addEventListener('focus', handleFocus);
+    }
+
+    return () => {
+      if (input) {
+        input.removeEventListener('focus', handleFocus);
+      }
+    };
+  }, []);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -24,7 +48,6 @@ export default function InputBox({ roomId, setMessages }) {
 
   const handleEmojiClick = (emojiData) => {
     setText((prev) => prev + emojiData.emoji);
-    // Focus back on input after emoji selection
     inputRef.current.focus();
   };
 
@@ -46,13 +69,11 @@ export default function InputBox({ roomId, setMessages }) {
       setTimeout(() => {
         setSendSuccess(false);
         setIsSending(false);
-        // Focus back on input after sending
         inputRef.current.focus();
       }, 1000);
     } catch (err) {
       console.error("Error sending message:", err);
       setIsSending(false);
-      // Focus back on input if there's an error
       inputRef.current.focus();
     }
   };
@@ -70,12 +91,12 @@ export default function InputBox({ roomId, setMessages }) {
   }, []);
 
   return (
-    <div className="relative border-t bg-white dark:bg-gray-900 px-3 py-2 sm:px-4 sm:py-3 flex items-center gap-2">
+    <div className="sticky bottom-0 bg-white dark:bg-gray-900 px-3 py-2 sm:px-4 sm:py-3 flex items-center gap-2 border-t">
       {/* Emoji Picker Toggle Button */}
       <button
         onClick={() => {
           setShowPicker((prev) => !prev);
-          inputRef.current.focus(); // Keep focus on input
+          inputRef.current.focus();
         }}
         className="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white"
         type="button"
@@ -85,7 +106,7 @@ export default function InputBox({ roomId, setMessages }) {
 
       {/* Input */}
       <input
-        ref={inputRef} // Add the ref here
+        ref={inputRef}
         value={text}
         onChange={handleChange}
         onKeyDown={(e) => e.key === "Enter" && send()}
