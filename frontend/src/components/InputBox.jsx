@@ -12,71 +12,20 @@ export default function InputBox({ roomId, setMessages }) {
   const [sendSuccess, setSendSuccess] = useState(false);
   const pickerRef = useRef(null);
   const textareaRef = useRef(null);
-  const containerRef = useRef(null);
   const user = useAuthStore((s) => s.user);
 
-  // Handle mobile keyboard and viewport adjustments
-  useEffect(() => {
-    if (!('visualViewport' in window)) return;
-
-    const handleFocusAndResize = () => {
-      if (window.innerWidth >= 768) return;
-
-      const visualViewport = window.visualViewport;
-      const container = containerRef.current;
-      
-      if (!container) return;
-
-      const adjustViewport = () => {
-        // Calculate how much space the keyboard takes
-        const viewportHeight = visualViewport.height;
-        const windowHeight = window.innerHeight;
-        const keyboardHeight = windowHeight - viewportHeight;
-
-        if (keyboardHeight > 0) {
-          // Scroll the container into view above the keyboard
-          container.style.paddingBottom = `${keyboardHeight}px`;
-          window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: 'smooth'
-          });
-        } else {
-          container.style.paddingBottom = '0';
-        }
-      };
-
-      const timeout = setTimeout(adjustViewport, 100);
-      return () => clearTimeout(timeout);
-    };
-
-    const input = textareaRef.current;
-    if (input) {
-      input.addEventListener('focus', handleFocusAndResize);
-      window.visualViewport.addEventListener('resize', handleFocusAndResize);
-    }
-
-    return () => {
-      if (input) {
-        input.removeEventListener('focus', handleFocusAndResize);
-        window.visualViewport?.removeEventListener('resize', handleFocusAndResize);
-      }
-    };
-  }, []);
-
   const handleChange = (e) => {
-    setText(e.target.value);
+  setText(e.target.value);
 
-    if (e.target.value.trim()) {
-      socket.emit("typing", { roomId, username: user.username });
-    }
+  if (textareaRef.current) {
+    textareaRef.current.style.height = "auto";
+    textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
+  }
 
-    // Auto-resize textarea
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = "auto";
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-  };
+  if (e.target.value.trim()) {
+    socket.emit("typing", { roomId, username: user.username });
+  }
+};
 
   const handleKeyDown = (e) => {
   // For mobile devices, always allow new lines with the enter key
@@ -98,47 +47,46 @@ export default function InputBox({ roomId, setMessages }) {
   };
 
   const send = async () => {
-    const trimmed = text.trim();
-    if (!trimmed || isSending) return;
+  const trimmed = text.trim();
+  if (!trimmed || isSending) return;
 
-    setIsSending(true);
+  setIsSending(true);
 
-    try {
-      const res = await axios.post("/api/message/send", {
-        roomId,
-        senderId: user._id,
-        content: trimmed,
-      });
+  try {
+    const res = await axios.post("/api/message/send", {
+      roomId,
+      senderId: user._id,
+      content: trimmed,
+    });
 
-      socket.emit("message", { message: res.data, room: roomId });
-      setText("");
-      setSendSuccess(true);
+    socket.emit("message", { message: res.data, room: roomId });
+    setText(""); // clears text
 
-      // Reset textarea height
-      const textarea = textareaRef.current;
-      if (textarea) {
-        textarea.style.height = "auto";
-      }
+    // Reset textarea height
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto"; // reset to auto before recomputing
+      textareaRef.current.rows = 1;
+    }
 
-      setTimeout(() => {
-        setSendSuccess(false);
-        setIsSending(false);
-        // Keep keyboard open by maintaining focus
-        textareaRef.current?.focus();
-      }, 300);
-    } catch (err) {
-      console.error("Error sending message:", err);
+    setSendSuccess(true);
+
+    setTimeout(() => {
+      setSendSuccess(false);
       setIsSending(false);
       textareaRef.current?.focus();
-    }
-  };
+    }, 300);
+  } catch (err) {
+    console.error("Error sending message:", err);
+    setIsSending(false);
+    textareaRef.current?.focus();
+  }
+};
 
   // Close emoji picker when clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // If click is outside the input box and not on emoji picker
       if (
-        textareaRef.current && 
+        textareaRef.current &&
         !textareaRef.current.contains(event.target) &&
         (!pickerRef.current || !pickerRef.current.contains(event.target))
       ) {
@@ -152,11 +100,9 @@ export default function InputBox({ roomId, setMessages }) {
     };
   }, []);
 
-  
-
   return (
-    <div className="relative" ref={containerRef}>
-      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 px-3 py-2 sm:py-3 flex items-end gap-2 border-t">
+    <div className="relative">
+      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 px-3 py-2 sm:py-3 flex items-end  border-t">
         {/* Emoji button */}
         <button
           type="button"
@@ -171,15 +117,15 @@ export default function InputBox({ roomId, setMessages }) {
 
         {/* Textarea */}
         <textarea
-        ref={textareaRef}
-        value={text}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        rows={1}
-        inputMode="text"
-        placeholder="Type a message..."
-        className="flex-1 min-h-[40px] max-h-36 resize-none overflow-auto px-4 py-2 rounded-2xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring focus:border-blue-400 whitespace-pre-wrap"
-      />
+          ref={textareaRef}
+          value={text}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          rows={1}
+          inputMode="text"
+          placeholder="Type a message..."
+          className="flex-1 min-h-[40px] max-h-36 resize-none overflow-auto px-4 py-2 rounded-2xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring focus:border-blue-400 whitespace-pre-wrap"
+        />
 
         {/* Send button */}
         <button
@@ -200,10 +146,7 @@ export default function InputBox({ roomId, setMessages }) {
 
       {/* Emoji Picker */}
       {showPicker && (
-        <div
-          ref={pickerRef}
-          className="absolute bottom-16 left-3 z-50"
-        >
+        <div ref={pickerRef} className="absolute bottom-16 left-3 z-50">
           <EmojiPicker onEmojiClick={handleEmojiClick} theme="auto" />
         </div>
       )}
