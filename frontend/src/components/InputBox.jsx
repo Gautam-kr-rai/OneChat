@@ -4,6 +4,7 @@ import socket from "../socket";
 import useAuthStore from "../store/authStore";
 import EmojiPicker from "emoji-picker-react";
 import { Smile, Send, Check } from "lucide-react";
+import TextareaAutosize from "react-textarea-autosize";
 
 export default function InputBox({ roomId, setMessages }) {
   const [text, setText] = useState("");
@@ -14,7 +15,7 @@ export default function InputBox({ roomId, setMessages }) {
   const inputRef = useRef(null);
   const user = useAuthStore((s) => s.user);
 
-  // Handle scroll to bottom on mobile when input is focused
+  // Scroll to bottom on input focus (mobile)
   useEffect(() => {
     const handleFocus = () => {
       setTimeout(() => {
@@ -34,6 +35,26 @@ export default function InputBox({ roomId, setMessages }) {
       if (input) {
         input.removeEventListener("focus", handleFocus);
       }
+    };
+  }, []);
+
+  // Scroll to bottom when keyboard opens (mobile)
+  useEffect(() => {
+    const originalHeight = window.innerHeight;
+
+    const handleResize = () => {
+      const currentHeight = window.innerHeight;
+      if (currentHeight < originalHeight) {
+        // Keyboard likely opened
+        setTimeout(() => {
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+        }, 100);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -69,23 +90,16 @@ export default function InputBox({ roomId, setMessages }) {
       setTimeout(() => {
         setSendSuccess(false);
         setIsSending(false);
-
-        // Refocus input after a slight delay to keep keyboard open
-        setTimeout(() => {
-          inputRef.current?.focus();
-        }, 100);
+        setTimeout(() => inputRef.current?.focus(), 100);
       }, 1000);
     } catch (err) {
       console.error("Error sending message:", err);
       setIsSending(false);
-
-      // Retry focusing input after error
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   };
 
+  // Hide emoji picker if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (pickerRef.current && !pickerRef.current.contains(event.target)) {
@@ -100,58 +114,59 @@ export default function InputBox({ roomId, setMessages }) {
   }, []);
 
   return (
-   <div className="relative">
-  <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 px-3 py-2  sm:py-3 flex items-center gap-2 border-t">
-    {/* Emoji Picker Toggle */}
-    <button
-      type="button"
-      onClick={() => {
-        setShowPicker((prev) => !prev);
-        inputRef.current?.focus();
-      }}
-      className="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white"
-    >
-      <Smile className="w-6 h-6" />
-    </button>
+    <div className="relative">
+      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 px-3 py-2 sm:py-3 flex items-center gap-2 border-t">
+        {/* Emoji Picker Toggle */}
+        <button
+          type="button"
+          onClick={() => {
+            setShowPicker((prev) => !prev);
+            inputRef.current?.focus();
+          }}
+          className="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white"
+        >
+          <Smile className="w-6 h-6" />
+        </button>
 
-    {/* Input */}
-    <input
-      ref={inputRef}
-      value={text}
-      onChange={handleChange}
-      onKeyDown={(e) => e.key === "Enter" && send()}
-      className="flex-1 min-w-0 px-4 py-2 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring focus:border-blue-400"
-      placeholder="Type a message..."
-    />
+        {/* Auto-resizing Textarea */}
+        <TextareaAutosize
+          ref={inputRef}
+          value={text}
+          onChange={handleChange}
+          onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
+          className="flex-1 resize-none overflow-hidden px-4 py-2 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring focus:border-blue-400"
+          placeholder="Type a message..."
+          minRows={1}
+          maxRows={6}
+        />
 
-    {/* Send Button */}
-    <button
-      type="button"
-      tabIndex={-1}
-      onClick={send}
-      disabled={isSending}
-      className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-colors duration-300 ${
-        sendSuccess
-          ? "bg-green-500 text-white"
-          : isSending
-          ? "bg-blue-600 text-white"
-          : "bg-blue-500 hover:bg-blue-600 text-white"
-      }`}
-    >
-      <Send className="w-5 h-5 sm:w-6 sm:h-6" />
-    </button>
-  </div>
+        {/* Send Button */}
+        <button
+          type="button"
+          tabIndex={-1}
+          onClick={send}
+          disabled={isSending}
+          className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-colors duration-300 ${
+            sendSuccess
+              ? "bg-green-500 text-white"
+              : isSending
+              ? "bg-blue-600 text-white"
+              : "bg-blue-500 hover:bg-blue-600 text-white"
+          }`}
+        >
+          {sendSuccess ? <Check className="w-5 h-5 sm:w-6 sm:h-6" /> : <Send className="w-5 h-5 sm:w-6 sm:h-6" />}
+        </button>
+      </div>
 
-  {/* Emoji Picker */}
-  {showPicker && (
-    <div
-      ref={pickerRef}
-      className="absolute bottom-16 left-3 z-50"
-    >
-      <EmojiPicker onEmojiClick={handleEmojiClick} theme="auto" />
+      {/* Emoji Picker */}
+      {showPicker && (
+        <div
+          ref={pickerRef}
+          className="absolute bottom-16 left-3 z-50"
+        >
+          <EmojiPicker onEmojiClick={handleEmojiClick} theme="auto" />
+        </div>
+      )}
     </div>
-  )}
-</div>
-
   );
 }
