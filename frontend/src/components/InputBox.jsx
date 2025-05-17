@@ -102,7 +102,7 @@ export default function InputBox({ roomId, setMessages }) {
 
   return (
     <div className="relative">
-      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 px-3 py-2 sm:py-3 flex items-end  border-t">
+      <div className="sticky bottom-0 z-40 bg-white dark:bg-gray-900 px-3 py-2 sm:py-3 flex items-end gap-1 border-t">
         {/* Emoji button */}
         <button
           type="button"
