@@ -82,7 +82,7 @@ export default function ChatRoom({ roomId }) {
       {/* Chat Header */}
       <div className="bg-gradient-to-br from-blue-900 via-slate-400 to-slate-900 dark:bg-gray-800 p-4 shadow-md sticky top-0 z-10">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-dark-blue-900">
-          🎶 Chat Room
+          🎶 GK
         </h2>
       </div>
 
